@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.API", "Client.API\Client.API.csproj", "{3B4B500F-7FBC-49B8-96C7-46691B0415DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "..\IdentityServer\IdentityServer.csproj", "{BDBEB666-258B-41A0-B609-E53CCF874FF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{BDBEB666-258B-41A0-B609-E53CCF874FF8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletServer", "..\WalletServer\WalletServer\WalletServer.csproj", "{6F25EB03-0B81-47D3-BC86-2E455491C5C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletServer", "WalletServer\WalletServer.csproj", "{6F25EB03-0B81-47D3-BC86-2E455491C5C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
