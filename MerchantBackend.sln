@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletServer", "WalletServer\WalletServer.csproj", "{6F25EB03-0B81-47D3-BC86-2E455491C5C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchant.Core", "Merchant.EntityFramework\Merchant.Core.csproj", "{DC298727-A027-443C-826C-3F4BDBF486F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchant.Core", "Merchant.Core\Merchant.Core.csproj", "{DC298727-A027-443C-826C-3F4BDBF486F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
