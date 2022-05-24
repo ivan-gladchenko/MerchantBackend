@@ -24,7 +24,7 @@ namespace IdentityServer.Controllers
         }
 
         [HttpPost("register")]
-        public async void Register(RegisterModel registerModel)
+        public async Task<IActionResult> Register(RegisterModel registerModel)
         {
             var user = new AppUser
             {
@@ -37,8 +37,10 @@ namespace IdentityServer.Controllers
             var result = await _userManager.CreateAsync(user, registerModel.password);
             if (!result.Succeeded)
             {
-                Response.StatusCode = 400;
+                return BadRequest();
             }
+
+            return Ok();
         }
     }
 }

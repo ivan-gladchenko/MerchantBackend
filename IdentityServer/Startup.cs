@@ -29,7 +29,7 @@ namespace IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetValue<string>("DbConnection");
-            services.AddDbContext<AuthDbContext>(options => options.UseSqlite(connectionString));
+            services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
             services.AddIdentity<AppUser, IdentityRole>(config =>
                 {
                     config.Password.RequiredLength = 4;
