@@ -24,6 +24,7 @@ namespace Merchant.Core.Models
         [ForeignKey(nameof(MerchantUserId))]
         public MerchantUser MerchantUser { get; set; }
         public long MerchantUserId { get; set; }
+        public string ProductId { get; set; }
     }
 
 

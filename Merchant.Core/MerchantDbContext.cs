@@ -16,5 +16,6 @@ namespace Merchant.Core
         {
             
         }
+
     }
 }
