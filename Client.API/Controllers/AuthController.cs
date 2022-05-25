@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Client.API.Models;
 using IdentityModel.Client;
+using Merchant.Core;
 
 namespace Client.API.Controllers
 {
@@ -15,9 +16,9 @@ namespace Client.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthManager authManager;
-        public AuthController()
+        public AuthController(MerchantDbContext dbContext)
         {
-            authManager = new AuthManager();
+            authManager = new AuthManager(dbContext);
         }
 
         [HttpPost("login")]

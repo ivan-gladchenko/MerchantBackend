@@ -51,23 +51,6 @@ namespace IdentityServer
                 .AddInMemoryIdentityResources(IdentityServerConfiguration.GetIdentityResources())
                 .AddDeveloperSigningCredential()
                 .AddProfileService<ProfileService>();
-
-            services.AddOpenTelemetryTracing(builder =>
-            {
-                builder.AddHttpClientInstrumentation();
-                builder.AddAspNetCoreInstrumentation(opts =>
-                {
-                    opts.RecordException = true;
-
-                });
-                builder.AddSource("Identity_Server");
-                builder.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Identity_Server"));
-                builder.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri("http://localhost:4317");
-                    options.Protocol = OtlpExportProtocol.Grpc;
-                });
-            });
             services.AddControllersWithViews();
         }
 

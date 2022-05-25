@@ -18,10 +18,40 @@ namespace IdentityServer
             {
                 ClientId = "wallet_server_client",
                 ClientSecrets = new List<Secret>{new Secret("secret_key".ToSha256())},
-                AllowedGrantTypes = new List<string>{"password"},
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
                 AllowedScopes =
                 {
                     "WalletServer",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                },
+                RedirectUris = {"http://localhost:5000/signin-oidc"},
+                AlwaysIncludeUserClaimsInIdToken = true,
+            },
+            new Client
+            {
+                ClientId = "web_client",
+                ClientSecrets = new List<Secret>{new Secret("client_secret_key".ToSha256())},
+                AllowedGrantTypes = GrantTypes.Code,
+                AllowedScopes =
+                {
+                    "WalletServer",
+                    "ClientPanel",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                },
+                RedirectUris = {"http://localhost:5000/signin-oidc"},
+                AlwaysIncludeUserClaimsInIdToken = true,
+            },
+            new Client
+            {
+                ClientId = "web_admin",
+                ClientSecrets = new List<Secret>{new Secret("admin_secret_key".ToSha256())},
+                AllowedGrantTypes = GrantTypes.Code,
+                AllowedScopes =
+                {
+                    "WalletServer",
+                    "AdminPanel",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 },
@@ -33,7 +63,9 @@ namespace IdentityServer
         public static IEnumerable<ApiScope> GetApiScopes() =>
         new List<ApiScope>
         {
-            new ApiScope("WalletServer")
+            new ApiScope("WalletServer"),
+            new ApiScope("AdminPanel"),
+            new ApiScope("ClientPanel")
         };
 
         public static IEnumerable<ApiResource> GetApiResources() =>
@@ -44,6 +76,27 @@ namespace IdentityServer
                 Name = "WalletServerResource",
                 Scopes = new List<string>
                 {
+                    "WalletServer",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                }
+            },
+            new ApiResource
+            {
+                Name = "AdminResource",
+                Scopes = new List<string>
+                {
+                    "AdminPanel",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                }
+            },
+            new ApiResource
+            {
+                Name = "ClientResource",
+                Scopes = new List<string>
+                {
+                    "ClientPanel",
                     "WalletServer",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile

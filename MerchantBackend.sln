@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletServer", "WalletServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Merchant.Core", "Merchant.Core\Merchant.Core.csproj", "{DC298727-A027-443C-826C-3F4BDBF486F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchant.API", "Merchant.API\Merchant.API.csproj", "{A50FB1B2-A877-4183-BAC7-1F9AA449EDC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Merchant.API", "Merchant.API\Merchant.API.csproj", "{A50FB1B2-A877-4183-BAC7-1F9AA449EDC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.API", "Admin.API\Admin.API.csproj", "{62AE30FD-FA8E-4D4B-BC23-6486CA546BD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A50FB1B2-A877-4183-BAC7-1F9AA449EDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A50FB1B2-A877-4183-BAC7-1F9AA449EDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A50FB1B2-A877-4183-BAC7-1F9AA449EDC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62AE30FD-FA8E-4D4B-BC23-6486CA546BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62AE30FD-FA8E-4D4B-BC23-6486CA546BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62AE30FD-FA8E-4D4B-BC23-6486CA546BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62AE30FD-FA8E-4D4B-BC23-6486CA546BD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
