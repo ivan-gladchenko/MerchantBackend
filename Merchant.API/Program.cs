@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("Mssql");
-builder.Services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(connectionString), contextLifetime: ServiceLifetime.Transient);
 
 var app = builder.Build();
 

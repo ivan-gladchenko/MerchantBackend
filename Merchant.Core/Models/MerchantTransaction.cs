@@ -12,7 +12,7 @@ namespace Merchant.Core.Models
     public class MerchantTransaction
     {
         [Key]
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         public CryptoName Crypto { get; set; }
         public double Value { get; set; }
         public string Address { get; set; }
@@ -21,6 +21,7 @@ namespace Merchant.Core.Models
         public DateTime CreatedAt { get; set; }
         public DateTime PaidAt { get; set; }
         public DateTime ConfirmedAt { get; set; }
+        public DateTime ExpiresAt { get; set; }
         [ForeignKey(nameof(MerchantUserId))]
         public MerchantUser MerchantUser { get; set; }
         public long MerchantUserId { get; set; }

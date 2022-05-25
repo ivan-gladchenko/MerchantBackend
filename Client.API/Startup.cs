@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Merchant.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace Client.API
 {
@@ -27,6 +29,7 @@ namespace Client.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
+            services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("Mssql")));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
                 {

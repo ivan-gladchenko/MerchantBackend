@@ -13,7 +13,7 @@ namespace Merchant.Core.Models
     {
         [Key]
         public long Id { get; set; }
-        public long AppUserId { get; set; }
+        public string AppUserName { get; set; }
         public string ApiKey { get; set; }
         public string WebhookAddress { get; set; }
         public List<MerchantTransaction> MerchantTransactions { get; set; }

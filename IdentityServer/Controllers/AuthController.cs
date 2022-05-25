@@ -39,7 +39,6 @@ namespace IdentityServer.Controllers
             {
                 return BadRequest();
             }
-
             return Ok();
         }
     }
