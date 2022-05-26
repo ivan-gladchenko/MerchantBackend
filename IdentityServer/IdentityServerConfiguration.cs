@@ -55,7 +55,7 @@ namespace IdentityServer
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 },
-                RedirectUris = {"http://localhost:5000/signin-oidc"},
+                RedirectUris = {"http://localhost:5078/signin-oidc"},
                 AlwaysIncludeUserClaimsInIdToken = true,
             }
         };
