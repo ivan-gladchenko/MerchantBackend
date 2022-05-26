@@ -18,6 +18,7 @@ namespace Merchant.Core.Models
         public string Address { get; set; }
         public double CryptoPrice { get; set; }
         public double Uah { get; set; }
+        public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime PaidAt { get; set; }
         public DateTime ConfirmedAt { get; set; }

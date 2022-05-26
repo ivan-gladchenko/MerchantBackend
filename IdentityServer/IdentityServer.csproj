@@ -19,4 +19,8 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Merchant.Core\Merchant.Core.csproj" />
+  </ItemGroup>
+
 </Project>

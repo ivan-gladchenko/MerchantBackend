@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Db;
+using Merchant.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Exporter;
@@ -30,6 +31,8 @@ namespace IdentityServer
         {
             var connectionString = Configuration.GetValue<string>("DbConnection");
             services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<MerchantDbContext>(options =>
+                options.UseSqlServer(Configuration.GetValue<string>("AppDbConnection")));
             services.AddIdentity<AppUser, IdentityRole>(config =>
                 {
                     config.Password.RequiredLength = 4;

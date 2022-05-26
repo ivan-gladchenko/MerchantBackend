@@ -23,7 +23,8 @@ namespace IdentityServer
             var appUser = await UserManager.GetUserAsync(context.Subject);
             var claims = new List<Claim>
             {
-                new Claim("wallet_id", appUser.Uuid)
+                new Claim("wallet_id", appUser.Uuid),
+                new Claim("username", appUser.UserName)
             };
             context.IssuedClaims.AddRange(claims);
         }

@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Merchant.Core;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Client.API
 {
@@ -30,38 +32,29 @@ namespace Client.API
         {
             services.AddHttpClient();
             services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("Mssql")));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+            services.AddAuthentication(config =>
                 {
-                    config.Authority = "http://127.0.0.1:2000";
-                    config.Audience = "WalletServerResource";
+                    config.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    config.DefaultChallengeScheme = "oidc";
+
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddOpenIdConnect("oidc", config =>
+                {
+                    config.ClientId = "web_client";
+                    config.ClientSecret = "client_secret_key";
+                    config.SaveTokens = true;
+                    config.GetClaimsFromUserInfoEndpoint = true;
+                    config.Authority = "http://localhost:2000";
+                    config.ResponseType = "code";
                     config.RequireHttpsMetadata = false;
+                    config.Scope.Add("ClientPanel");
                 });
             services.AddCors(c => c.AddDefaultPolicy(f => f.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Client.API", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
-                    }
-                });
             });
         }
 

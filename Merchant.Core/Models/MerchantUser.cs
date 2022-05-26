@@ -16,6 +16,17 @@ namespace Merchant.Core.Models
         public string AppUserName { get; set; }
         public string ApiKey { get; set; }
         public string WebhookAddress { get; set; }
-        public List<MerchantTransaction> MerchantTransactions { get; set; }
+        public List<MerchantTransaction>? MerchantTransactions { get; set; }
+
+        public MerchantUser()
+        {
+            
+        }
+        public MerchantUser(string appUserName)
+        {
+            AppUserName = appUserName;
+            ApiKey = Guid.NewGuid().ToString("N");
+            WebhookAddress = string.Empty;
+        }
     }
 }

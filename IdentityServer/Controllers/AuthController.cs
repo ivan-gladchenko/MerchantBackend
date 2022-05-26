@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityServer.Db;
 using IdentityServer.Models;
 using IdentityServer4.Services;
+using Merchant.Core;
+using Merchant.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +17,14 @@ namespace IdentityServer.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly IIdentityServerInteractionService _interactionService;
+        private readonly MerchantDbContext _merchantDbContext;
 
-        public AuthController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IIdentityServerInteractionService interactionService)
+        public AuthController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IIdentityServerInteractionService interactionService, MerchantDbContext merchantDbContext)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _interactionService = interactionService;
+            _merchantDbContext = merchantDbContext;
         }
         [HttpGet]
         public IActionResult Login(string returnUrl)
@@ -90,12 +95,16 @@ namespace IdentityServer.Controllers
                 UserName = viewModel.UserName,
                 PhoneNumber = viewModel.PhoneNumber,
                 Email = viewModel.Email,
-                FullName =  viewModel.FullName
+                FullName =  viewModel.FullName,
+                Uuid = Guid.NewGuid().ToString("D")
             };
             var result = await _userManager.CreateAsync(user, viewModel.Password);
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
+                var merchantUser = new MerchantUser(viewModel.UserName);
+                _merchantDbContext.MerchantUsers.Add(merchantUser);
+                await _merchantDbContext.SaveChangesAsync();
                 return Redirect(viewModel.ReturnUrl);
             }
             ModelState.AddModelError(string.Empty, "Error occurred");

@@ -40,7 +40,7 @@ namespace IdentityServer
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 },
-                RedirectUris = {"http://localhost:5000/signin-oidc"},
+                RedirectUris = {"http://localhost:5050/signin-oidc"},
                 AlwaysIncludeUserClaimsInIdToken = true,
             },
             new Client
@@ -94,6 +94,7 @@ namespace IdentityServer
             new ApiResource
             {
                 Name = "ClientResource",
+                UserClaims = {JwtClaimTypes.Name},
                 Scopes = new List<string>
                 {
                     "ClientPanel",
