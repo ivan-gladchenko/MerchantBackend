@@ -42,7 +42,7 @@ namespace Client.API.Controllers
         [HttpGet("balance")]
         public async Task<double> GetBalance()
         {
-           return  await walletManager.GetBalance();
+           return await walletManager.GetBalance();
         }
 
         [HttpGet("address")]

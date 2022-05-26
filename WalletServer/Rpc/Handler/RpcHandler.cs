@@ -12,7 +12,7 @@ namespace WalletServer.Rpc.Handler
     internal class RpcHandler
     {
         private readonly NetworkCredential _credentials;
-        private readonly Uri _address;
+        private Uri _address;
         public RpcHandler(string address, string login, string password) : this(address)
         {
             _credentials = new NetworkCredential(login, password);
@@ -30,11 +30,15 @@ namespace WalletServer.Rpc.Handler
             _address = new Uri(address);
         }
 
-        public RpcResponse<T> Send<T>(string method, object parameters)
+        public RpcResponse<T> Send<T>(string method, object parameters, bool isClear = false)
         {
             var webClient = GetClient();
             var body = new RpcBody(method, parameters);
             var json = JsonSerializer.Serialize(body);
+            if (isClear)
+            {
+                _address = new Uri(_address.OriginalString.Split("wallet")[0]);
+            }
             try
             {
                 var httpResponse = webClient.PostAsync(_address, new StringContent(json, Encoding.UTF8, "application/json-rpc")).GetAwaiter().GetResult();

@@ -29,7 +29,6 @@ namespace IdentityServer.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
-            
             var viewModel = new LoginViewModel
            {
                ReturnUrl = returnUrl

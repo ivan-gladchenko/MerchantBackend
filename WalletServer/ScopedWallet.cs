@@ -40,14 +40,18 @@ namespace WalletServer
                     CoreService = null;
                     return;
             }
-            bool exists = CoreService.ListWallets().Exists(obj => obj == walletId);
+            bool exists = CoreService.ListWallets()?.Exists(obj => obj == walletId) ?? false;
             if (exists)
             {
                 return;
             }
             try
             {
-                CoreService.LoadWallet(walletId);
+                var resp = CoreService.LoadWallet(walletId);
+                if (resp == null)
+                {
+                    CoreService.CreateWallet(walletId, false, false);
+                }
             }
             catch (Exception e)
             {

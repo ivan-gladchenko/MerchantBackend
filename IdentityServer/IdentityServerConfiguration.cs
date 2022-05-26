@@ -77,6 +77,8 @@ namespace IdentityServer
                 Scopes = new List<string>
                 {
                     "WalletServer",
+                    "AdminPanel",
+                    "ClientPanel",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 }

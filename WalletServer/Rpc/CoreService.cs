@@ -296,7 +296,10 @@ namespace WalletServer.Rpc
                 new object[] {minconf, maxconf, addresses, include_unsafe, query_options}).result;
         public ListWalletDirResponse ListWalletDir() =>
             Handler.Send<ListWalletDirResponse>("listwalletdir", null).result;
-        public List<string> ListWallets() => Handler.Send<List<string>>("listwallets", null).result;
+        public List<string> ListWallets(){
+
+            return Handler.Send<List<string>>("listwallets", null, true).result;
+        }
         public LoadWalletResponse LoadWallet(string filename, object load_on_startup = null) => Handler
             .Send<LoadWalletResponse>("loadwallet", new object[] {filename, load_on_startup}).result;
         public bool LockUnspent(bool unlock, List<LockUnspentTransaction> transactions = null) =>

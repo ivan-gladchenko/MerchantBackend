@@ -25,6 +25,7 @@ builder.Services.AddAuthentication(config =>
         config.Authority = "http://localhost:2000";
         config.ResponseType = "code";
         config.RequireHttpsMetadata = false;
+        config.Scope.Add("AdminPanel");
     });
 builder.Services.AddDbContext<MerchantDbContext>(
     o => o.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")), ServiceLifetime.Transient);

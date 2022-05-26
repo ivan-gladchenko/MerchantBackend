@@ -45,7 +45,7 @@ namespace Client.API
                     config.ClientSecret = "client_secret_key";
                     config.SaveTokens = true;
                     config.GetClaimsFromUserInfoEndpoint = true;
-                    config.Authority = "http://localhost:2000";
+                    config.Authority = "http://127.0.0.1:2000";
                     config.ResponseType = "code";
                     config.RequireHttpsMetadata = false;
                     config.Scope.Add("ClientPanel");
