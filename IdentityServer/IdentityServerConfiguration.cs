@@ -45,6 +45,20 @@ namespace IdentityServer
             },
             new Client
             {
+                ClientId = "merchant_client",
+                ClientSecrets = new List<Secret>{new Secret("merchant_secret_key".ToSha256())},
+                AllowedGrantTypes = GrantTypes.ClientCredentials,
+                AllowedScopes =
+                {
+                    "WalletServer",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                },
+                RedirectUris = {"http://localhost:5050/signin-oidc"},
+                AlwaysIncludeUserClaimsInIdToken = true,
+            },
+            new Client
+            {
                 ClientId = "web_admin",
                 ClientSecrets = new List<Secret>{new Secret("admin_secret_key".ToSha256())},
                 AllowedGrantTypes = GrantTypes.Code,
@@ -89,6 +103,16 @@ namespace IdentityServer
                 Scopes = new List<string>
                 {
                     "AdminPanel",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                }
+            },
+            new ApiResource
+            {
+                Name = "MerchantResource",
+                Scopes = new List<string>
+                {
+                    "WalletServer",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 }

@@ -1,4 +1,6 @@
-﻿using Merchant.Core;
+﻿using Merchant.API.Wallet;
+using Merchant.Core;
+using Merchant.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +15,13 @@ namespace Merchant.API.Controllers
         public PaymentController(MerchantDbContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        [HttpGet]
+        public async Task<List<CoreTransaction>?> GetTransactions([FromQuery] CryptoName cryptoName, [FromQuery] string walletId)
+        {
+            TransactionsHandler handler = new TransactionsHandler();
+            return await handler.GetTransactions(cryptoName, walletId);
         }
     }
 }

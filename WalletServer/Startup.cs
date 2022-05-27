@@ -42,6 +42,12 @@ namespace WalletServer
                     config.Authority = "http://127.0.0.1:2000";
                     config.Audience = "WalletServerResource";
                     config.RequireHttpsMetadata = false;
+                })
+                .AddJwtBearer("Merchant", config =>
+                {
+                    config.Authority = "http://127.0.0.1:2000";
+                    config.Audience = "MerchantResource";
+                    config.RequireHttpsMetadata = false;
                 });
             services.AddHttpContextAccessor();
             services.AddTransient<ScopedWallet>();
