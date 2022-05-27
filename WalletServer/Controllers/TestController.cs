@@ -13,11 +13,13 @@ namespace WalletServer.Controllers
     public class TestController : Controller
     {
         private ICoreService bitcoinService;
+        private ICoreService litecoinService;
         private EnvConfiguration _envConfiguration;
 
         public TestController(EnvConfiguration envConfiguration)
         {
             _envConfiguration = envConfiguration;
+            litecoinService = new LitecoinService(_envConfiguration.LitecoinUrl, _envConfiguration.RpcLogin, _envConfiguration.RpcPassword);
             bitcoinService = new BitcoinService(_envConfiguration.BitcoinUrl, _envConfiguration.RpcLogin, _envConfiguration.RpcPassword);
         }
 
@@ -44,10 +46,15 @@ namespace WalletServer.Controllers
             return bitcoinService.LoadWallet(walletName).warning;
         }
 
-        [HttpGet("wallets")]
-        public List<string> ListWallets()
+        [HttpGet("wallets/btc")]
+        public List<string> ListWalletsBtc()
         {
             return bitcoinService.ListWallets();
+        }
+        [HttpGet("wallets/ltc")]
+        public List<string> ListWalletsLtc()
+        {
+            return litecoinService.ListWallets();
         }
     }
 }

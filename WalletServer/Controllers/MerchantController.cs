@@ -36,12 +36,5 @@ namespace WalletServer.Controllers
                 envConfiguration.RpcPassword, wallet);
             return coreService.ListTransactions(count: 100);
         }
-        [HttpGet("dogecoin")]
-        public List<ListTransactionsResponse> GetDogecoinTransactions([FromQuery] string wallet)
-        {
-            coreService = new BitcoinService(envConfiguration.DogecoinUrl, envConfiguration.RpcLogin,
-                envConfiguration.RpcPassword, wallet);
-            return coreService.ListTransactions(count: 100);
-        }
     }
 }

@@ -33,9 +33,6 @@ namespace WalletServer
                 case "litecoin":
                     CoreService = new LitecoinService(envConfiguration.LitecoinUrl, envConfiguration.RpcLogin, envConfiguration.RpcPassword, walletId);
                     break;
-                case "dogecoin":
-                    CoreService = new DogecoinService(envConfiguration.DogecoinUrl, envConfiguration.RpcLogin, envConfiguration.RpcPassword, walletId);
-                    break;
                 default:
                     CoreService = null;
                     return;

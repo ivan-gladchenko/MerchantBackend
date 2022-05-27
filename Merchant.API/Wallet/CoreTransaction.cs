@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+#pragma warning disable CS8618
 
 namespace Merchant.API.Wallet
 {

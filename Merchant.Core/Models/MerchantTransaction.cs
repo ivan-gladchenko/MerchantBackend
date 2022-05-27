@@ -33,7 +33,6 @@ namespace Merchant.Core.Models
     public enum CryptoName
     {
         Bitcoin,
-        Litecoin,
-        Dogecoin
+        Litecoin
     }
 }

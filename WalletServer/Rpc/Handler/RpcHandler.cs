@@ -35,10 +35,10 @@ namespace WalletServer.Rpc.Handler
             var webClient = GetClient();
             var body = new RpcBody(method, parameters);
             var json = JsonSerializer.Serialize(body);
-            if (isClear)
-            {
-                _address = new Uri(_address.OriginalString.Split("wallet")[0]);
-            }
+            // if (isClear)
+            // {
+            //     _address = new Uri(_address.OriginalString.Split("wallet")[0]);
+            // }
             try
             {
                 var httpResponse = webClient.PostAsync(_address, new StringContent(json, Encoding.UTF8, "application/json-rpc")).GetAwaiter().GetResult();
