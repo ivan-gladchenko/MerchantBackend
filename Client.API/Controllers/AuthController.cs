@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Client.API.Models;
@@ -19,6 +20,22 @@ namespace Client.API.Controllers
         public AuthController(MerchantDbContext dbContext)
         {
             authManager = new AuthManager(dbContext);
+        }
+
+        [HttpPost("testlogin")]
+        public async Task<IActionResult> LoginTest([FromForm] string username, [FromForm] string password, [FromForm] string returnUrl)
+        {
+            CookieContainer cc = new CookieContainer();
+            var resp = await authManager.LoginTest(cc, username, password, returnUrl);
+            if (resp.IsSuccessStatusCode)
+            {
+                foreach (Cookie cookie in cc.GetAllCookies())
+                {
+                    Response.Cookies.Append(cookie.Name, cookie.Value);
+                }
+                return Ok();
+            }
+            return Unauthorized();
         }
 
         [HttpPost("login")]

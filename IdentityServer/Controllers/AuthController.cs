@@ -97,6 +97,12 @@ namespace IdentityServer.Controllers
                 FullName =  viewModel.FullName,
                 Uuid = Guid.NewGuid().ToString("D")
             };
+            var checkUser = await _userManager.FindByNameAsync(viewModel.UserName);
+            if (checkUser != null)
+            {
+                ModelState.AddModelError(string.Empty, "User with that username exists");
+                return View(viewModel);
+            }
             var result = await _userManager.CreateAsync(user, viewModel.Password);
             if (result.Succeeded)
             {

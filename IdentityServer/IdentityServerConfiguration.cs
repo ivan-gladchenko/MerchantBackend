@@ -32,7 +32,7 @@ namespace IdentityServer
             {
                 ClientId = "web_client",
                 ClientSecrets = new List<Secret>{new Secret("client_secret_key".ToSha256())},
-                AllowedGrantTypes = GrantTypes.Code,
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                 AllowedScopes =
                 {
                     "WalletServer",
@@ -61,7 +61,8 @@ namespace IdentityServer
             {
                 ClientId = "web_admin",
                 ClientSecrets = new List<Secret>{new Secret("admin_secret_key".ToSha256())},
-                AllowedGrantTypes = GrantTypes.Code,
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                Claims = new List<ClientClaim>{new("role", "admin")},
                 AllowedScopes =
                 {
                     "WalletServer",

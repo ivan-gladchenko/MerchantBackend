@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 using Merchant.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -32,23 +33,13 @@ namespace Client.API
         {
             services.AddHttpClient();
             services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("Mssql")));
-            services.AddAuthentication(config =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
                 {
-                    config.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    config.DefaultChallengeScheme = "oidc";
-
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddOpenIdConnect("oidc", config =>
-                {
-                    config.ClientId = "web_client";
-                    config.ClientSecret = "client_secret_key";
-                    config.SaveTokens = true;
-                    config.GetClaimsFromUserInfoEndpoint = true;
                     config.Authority = "http://127.0.0.1:2000";
-                    config.ResponseType = "code";
+                    config.SaveToken = true;
+                    config.Audience = "WalletServerResource";
                     config.RequireHttpsMetadata = false;
-                    config.Scope.Add("ClientPanel");
                 });
             services.AddCors(c => c.AddDefaultPolicy(f => f.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             services.AddControllers();

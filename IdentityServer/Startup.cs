@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Db;
 using Merchant.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Exporter;
@@ -54,6 +55,13 @@ namespace IdentityServer
                 .AddInMemoryIdentityResources(IdentityServerConfiguration.GetIdentityResources())
                 .AddDeveloperSigningCredential()
                 .AddProfileService<ProfileService>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer("Admin", config =>
+                {
+                    config.Authority = "http://127.0.0.1:2000";
+                    config.Audience = "AdminResource";
+                    config.RequireHttpsMetadata = false;
+                });
             services.AddControllersWithViews();
         }
 
