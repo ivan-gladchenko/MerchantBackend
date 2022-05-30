@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Client.API.Models;
+using Client.API.Wallet;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,41 +21,29 @@ namespace Client.API.Controllers
     [ApiController]
     public class WalletController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private WalletManager walletManager;
+        private readonly WalletManager _walletManager;
 
-        public WalletController(IHttpClientFactory httpClientFactory)
+        public WalletController(WalletManagerHandler walletManagerHandler)
         {
-            _httpClientFactory = httpClientFactory;
+            _walletManager = walletManagerHandler.WalletManager;
         }
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            var jsonToken = HttpContext.GetTokenAsync("access_token").GetAwaiter().GetResult();
-            if (!Enum.TryParse((string)context.RouteData.Values.FirstOrDefault(obj => obj.Key == "wallet").Value, out Crypto wallet))
-            {
-                return;
-            }
-            var client = _httpClientFactory.CreateClient();
-            client.SetBearerToken(jsonToken);
-            walletManager = new WalletManager(client, wallet);
-        }
-
+        
         [HttpGet("balance")]
         public async Task<double> GetBalance()
         {
-           return await walletManager.GetBalance();
+           return await _walletManager.GetBalance();
         }
 
         [HttpGet("address")]
         public async Task<string> CreateAddress()
         {
-            return await walletManager.CreateAddress();
+            return await _walletManager.CreateAddress();
         }
 
         [HttpGet("transactions")]
         public async Task<List<MappedTransaction>> GetTransactions()
         {
-            return await walletManager.GetTransactions();
+            return await _walletManager.GetTransactions();
         }
 
         [HttpPost("send")]
@@ -62,7 +51,7 @@ namespace Client.API.Controllers
         {
             try
             {
-                return await walletManager.Send(model);
+                return await _walletManager.Send(model);
             }
             catch (Exception e)
             {

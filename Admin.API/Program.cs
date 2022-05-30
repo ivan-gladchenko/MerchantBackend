@@ -1,6 +1,7 @@
 using Merchant.Core;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,31 +10,55 @@ builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddAuthentication(config =>
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        config.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        config.DefaultChallengeScheme = "oidc";
+        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
 
-    })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddOpenIdConnect("oidc", config =>
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
-        config.ClientId = "web_admin";
-        config.ClientSecret = "admin_secret_key";
-        config.SaveTokens = true;
-        config.Authority = "http://localhost:2000";
-        config.ResponseType = "code";
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+
+            },
+            new List<string>()
+        }
+    });
+});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+    {
+        config.Authority = "http://127.0.0.1:2000";
+        config.SaveToken = true;
+        config.Audience = "AdminResource";
         config.RequireHttpsMetadata = false;
-        config.Scope.Add("AdminPanel");
     });
 builder.Services.AddDbContext<MerchantDbContext>(
-    o => o.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")), ServiceLifetime.Transient);
+    o => o.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
+
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();

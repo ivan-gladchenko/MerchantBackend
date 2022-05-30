@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Db;
+using Merchant.Core;
+using Merchant.Core.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer
@@ -21,8 +24,9 @@ namespace IdentityServer
                 var serviceProvider = scope.ServiceProvider;
                 try
                 {
-                    var context = serviceProvider.GetRequiredService<AuthDbContext>();
-                    DbInitializer.Initialize(context);
+                    var context = serviceProvider.GetRequiredService<MerchantDbContext>();
+                    var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+                    DbInitializer.Initialize(context, userManager);
                 }
                 catch (Exception e)
                 {

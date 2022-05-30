@@ -22,21 +22,6 @@ namespace Client.API.Controllers
             authManager = new AuthManager(dbContext);
         }
 
-        [HttpPost("testlogin")]
-        public async Task<IActionResult> LoginTest([FromForm] string username, [FromForm] string password, [FromForm] string returnUrl)
-        {
-            CookieContainer cc = new CookieContainer();
-            var resp = await authManager.LoginTest(cc, username, password, returnUrl);
-            if (resp.IsSuccessStatusCode)
-            {
-                foreach (Cookie cookie in cc.GetAllCookies())
-                {
-                    Response.Cookies.Append(cookie.Name, cookie.Value);
-                }
-                return Ok();
-            }
-            return Unauthorized();
-        }
 
         [HttpPost("login")]
         public async Task<LoginResponse> Login(LoginModel loginModel)
@@ -44,7 +29,7 @@ namespace Client.API.Controllers
             var resp = await authManager.Login(loginModel);
             if (resp.error != null)
             {
-                Response.StatusCode = StatusCodes.Status400BadRequest;
+                Response.StatusCode = StatusCodes.Status401Unauthorized;
             }
             return resp;
         }

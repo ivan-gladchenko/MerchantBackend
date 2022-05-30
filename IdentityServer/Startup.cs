@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Db;
 using Merchant.Core;
+using Merchant.Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +31,6 @@ namespace IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetValue<string>("DbConnection");
-            services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
             services.AddDbContext<MerchantDbContext>(options =>
                 options.UseSqlServer(Configuration.GetValue<string>("AppDbConnection")));
             services.AddIdentity<AppUser, IdentityRole>(config =>
@@ -41,7 +40,7 @@ namespace IdentityServer
                     config.Password.RequireNonAlphanumeric = false;
                     config.Password.RequireUppercase = false;
                 })
-                .AddEntityFrameworkStores<AuthDbContext>()
+                .AddEntityFrameworkStores<MerchantDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer(config =>

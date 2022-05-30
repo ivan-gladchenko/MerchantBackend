@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using IdentityServer.Db;
+using Merchant.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

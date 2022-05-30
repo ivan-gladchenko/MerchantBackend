@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Client.API.Models;
 
-namespace Client.API
+namespace Client.API.Wallet
 {
     public abstract class MapperBase<TFirst, TSecond>
     {

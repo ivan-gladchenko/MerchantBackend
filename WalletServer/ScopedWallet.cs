@@ -17,8 +17,7 @@ namespace WalletServer
             {
                 return;
             }
-            var wallet = _httpContextAccessor.HttpContext.Request.RouteValues.FirstOrDefault(o => o.Key == "wallet");
-            var val = (string)wallet.Value;
+            var val = (string)_httpContextAccessor.HttpContext.Request.RouteValues["wallet"];
             var walletIdClaim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(obj => obj.Type == "wallet_id");
             if (walletIdClaim == null)
             {

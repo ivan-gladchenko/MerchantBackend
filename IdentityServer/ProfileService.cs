@@ -7,6 +7,7 @@ using IdentityModel;
 using IdentityServer.Db;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using Merchant.Core.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServer

@@ -15,7 +15,6 @@ namespace Admin.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly MerchantDbContext _context;
-        private HttpClient _httpClient = new();
 
         public UsersController(MerchantDbContext context)
         {
@@ -34,14 +33,10 @@ namespace Admin.API.Controllers
             var user = _context.MerchantUsers.FirstOrDefault(o => o.Id == id);
             if (user == null)
                 return NotFound();
-            var jsonToken = await HttpContext.GetTokenAsync("access_token");
-            _httpClient.SetBearerToken(jsonToken);
-            var resp = await _httpClient.DeleteAsync($"http://127.0.0.1:2000/api/Users/{user.AppUserName}");
-            if (!resp.IsSuccessStatusCode)
-            {
-                return BadRequest();
-            }
             _context.MerchantUsers.Remove(user);
+            var appUser = _context.Users.FirstOrDefault(o => o.UserName == user.AppUserName);
+            if (appUser != null)
+                _context.Users.Remove(appUser);
             await _context.SaveChangesAsync();
             return Ok();
         }
