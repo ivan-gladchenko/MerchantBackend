@@ -1,28 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Client.API.Wallet;
 using Merchant.Core;
+using Merchant.Core.Extensions;
 using Merchant.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class MerchantController : ControllerBase
     {
         private readonly MerchantDbContext _context;
-        private readonly WalletManager _walletManager;
-        public MerchantController(MerchantDbContext context, WalletManagerHandler walletManagerHandler)
+        public MerchantController(MerchantDbContext context)
         {
-            _walletManager = walletManagerHandler.WalletManager;
             _context = context;
         }
 
-        [HttpGet]
-        public List<MerchantTransaction> GetMerchantTransactions()
+        [HttpGet("transactions")]
+        public List<MerchantTransaction> GetMerchantTransactions([FromQuery] string status, [FromQuery] CryptoName? crypto, string productId)
         {
-            return new List<MerchantTransaction>();
+            var merchantUser = _context.MerchantUsers.FirstOrDefault(o => o.AppUserName == User.Identity.Name);
+            return _context.MerchantTransactions.Where(o => o.MerchantUserId == merchantUser.Id)
+                .AsEnumerable()
+                .WhereIf(status != null,
+                    o => o.Status == status)
+                .WhereIf(crypto != null,
+                    o => o.Crypto == crypto)
+                .WhereIf(productId != null,
+                    o => o.ProductId == productId)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToList();
         }
     }
 }

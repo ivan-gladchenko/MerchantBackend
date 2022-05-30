@@ -9,6 +9,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Merchant.Core.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace IdentityServer
 {
@@ -25,7 +26,7 @@ namespace IdentityServer
             var claims = new List<Claim>
             {
                 new Claim("wallet_id", appUser.Uuid),
-                new Claim("username", appUser.UserName)
+                new Claim(JwtRegisteredClaimNames.UniqueName, appUser.UserName)
             };
             context.IssuedClaims.AddRange(claims);
         }
