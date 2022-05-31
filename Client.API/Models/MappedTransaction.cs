@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Merchant.Core.Models;
 
 namespace Client.API.Models
 {
@@ -13,13 +14,7 @@ namespace Client.API.Models
         public bool @in { get; set; }
         public int Confirmations { get; set; }
         public DateTime Date { get; set; }
-        public Crypto Crypto { get; set; }
+        public CryptoName Crypto { get; set; }
 
-    }
-    public enum Crypto
-    {
-        bitcoin = 0,
-        litecoin = 1,
-        dogecoin = 2,
     }
 }

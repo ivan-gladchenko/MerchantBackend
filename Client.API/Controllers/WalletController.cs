@@ -23,11 +23,22 @@ namespace Client.API.Controllers
     {
         private readonly WalletManager _walletManager;
 
-        public WalletController(WalletManagerHandler walletManagerHandler)
+        public WalletController(MerchantContextHandler merchantContextHandler)
         {
-            _walletManager = walletManagerHandler.WalletManager;
+            _walletManager = merchantContextHandler.WalletManager;
         }
-        
+
+        [HttpGet]
+        public async Task<string> Get()
+        {
+            var prices = await WalletManager.GetPrices();
+            return new
+            {
+                bitcoin = prices.Key,
+                litecoin = prices.Value,
+            }.ToString();
+        }
+
         [HttpGet("balance")]
         public async Task<double> GetBalance()
         {

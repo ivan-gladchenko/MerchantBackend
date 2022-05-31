@@ -16,6 +16,7 @@ using Merchant.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Client.API
 {
@@ -77,7 +78,7 @@ namespace Client.API
                 });
             });
             services.AddHttpContextAccessor();
-            services.AddTransient<WalletManagerHandler>();
+            services.AddTransient<MerchantContextHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

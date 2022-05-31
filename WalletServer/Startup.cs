@@ -50,7 +50,7 @@ namespace WalletServer
                     config.RequireHttpsMetadata = false;
                 });
             services.AddHttpContextAccessor();
-            services.AddTransient<ScopedWallet>();
+            services.AddScoped<ScopedWallet>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

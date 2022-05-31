@@ -18,12 +18,11 @@ namespace WalletServer
                 return;
             }
             var val = (string)_httpContextAccessor.HttpContext.Request.RouteValues["wallet"];
-            var walletIdClaim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(obj => obj.Type == "wallet_id");
-            if (walletIdClaim == null)
+            var walletId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(obj => obj.Type == "wallet_id")?.Value ?? _httpContextAccessor.HttpContext.Request.Query["id"].ToString();
+            if (walletId == null)
             {
                 return;
             }
-            var walletId = walletIdClaim.Value;
             switch (val)
             {
                 case "bitcoin":

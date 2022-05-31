@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Client.API.Models;
+using Merchant.Core.Models;
 
 namespace Client.API.Wallet
 {
     public abstract class MapperBase<TFirst, TSecond>
     {
-        public abstract TSecond Map(TFirst element, Crypto crypto);
+        public abstract TSecond Map(TFirst element, CryptoName crypto);
 
 
-        public List<TSecond> Map(List<TFirst> elements, Crypto crypto, Action<TSecond> callback = null)
+        public List<TSecond> Map(List<TFirst> elements, CryptoName crypto, Action<TSecond> callback = null)
         {
             var objectCollection = new List<TSecond>();
 

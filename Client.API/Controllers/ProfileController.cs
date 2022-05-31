@@ -18,31 +18,23 @@ namespace Client.API.Controllers
     public class ProfileController : Controller
     {
         private readonly MerchantDbContext _context;
-        private string _username;
 
         public ProfileController(MerchantDbContext context)
         {
             _context = context;
-
-        }
-
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            _username = context.HttpContext.User.Claims.ToList().First(a => a.Type == "username").Value;
-            base.OnActionExecuting(context);
         }
 
         [HttpGet]
         public async Task<UserProfileDto> Get()
         {
-            var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == _username);
+            var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == User.Identity.Name);
             return new UserProfileDto(user);
         }
 
         [HttpPost("webhook")]
         public async Task<UserProfileDto> Webhook(WebhookSetModel model)
         {
-            var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == _username);
+            var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == User.Identity.Name);
             user.WebhookAddress = model.Address;
             user = _context.MerchantUsers.Update(user).Entity;
             await _context.SaveChangesAsync();
@@ -52,7 +44,7 @@ namespace Client.API.Controllers
         [HttpPost("api-key")]
         public async Task<UserProfileDto> ApiKey()
         {
-            var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == _username);
+            var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == User.Identity.Name);
             user.ApiKey = Guid.NewGuid().ToString("N");
             user = _context.MerchantUsers.Update(user).Entity;
             await _context.SaveChangesAsync();

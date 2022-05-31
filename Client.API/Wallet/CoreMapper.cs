@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Client.API.Models;
+using Merchant.Core.Models;
 
 namespace Client.API.Wallet
 {
     public class CoreMapper : MapperBase<ListTransactionsResponse, MappedTransaction>
     {
-        public override MappedTransaction Map(ListTransactionsResponse element, Crypto crypto)
+        public override MappedTransaction Map(ListTransactionsResponse element, CryptoName crypto)
         {
             return new MappedTransaction
             {
@@ -19,7 +20,7 @@ namespace Client.API.Wallet
             };
         }
 
-        public static List<MappedTransaction> Process(List<ListTransactionsResponse> transactions, Crypto crypto)
+        public static List<MappedTransaction> Process(List<ListTransactionsResponse> transactions, CryptoName crypto)
         {
             CoreMapper mapper = new CoreMapper();
             return mapper.Map(transactions, crypto);

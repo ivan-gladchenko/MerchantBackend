@@ -42,6 +42,7 @@ namespace IdentityServer
                 },
                 RedirectUris = {"http://localhost:5050/signin-oidc"},
                 AlwaysIncludeUserClaimsInIdToken = true,
+                AccessTokenLifetime = 10800
             },
             new Client
             {
@@ -72,6 +73,7 @@ namespace IdentityServer
                 },
                 RedirectUris = {"http://localhost:5078/signin-oidc"},
                 AlwaysIncludeUserClaimsInIdToken = true,
+                AccessTokenLifetime = 10800
             }
         };
 
