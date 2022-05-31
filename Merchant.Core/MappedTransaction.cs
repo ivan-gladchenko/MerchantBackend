@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Merchant.Core.Models;
+﻿using Merchant.Core.Models;
 
-namespace Client.API.Models
+namespace Merchant.Core
 {
     public class MappedTransaction
     {

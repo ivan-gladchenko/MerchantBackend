@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Client.API.Models;
-using Merchant.Core.Models;
+﻿using Merchant.Core.Models;
 
-namespace Client.API.Wallet
+namespace Merchant.Core
 {
     public abstract class MapperBase<TFirst, TSecond>
     {

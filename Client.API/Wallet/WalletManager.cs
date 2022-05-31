@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Client.API.Models;
+using Merchant.Core;
 using Merchant.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

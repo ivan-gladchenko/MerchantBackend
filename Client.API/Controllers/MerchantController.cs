@@ -22,7 +22,7 @@ namespace Client.API.Controllers
         }
 
         [HttpGet("transactions")]
-        public List<MerchantTransaction> GetMerchantTransactions([FromQuery] string status, [FromQuery] CryptoName? crypto, string productId)
+        public List<MerchantTransaction> GetMerchantTransactions([FromQuery] TransactionStatus status, [FromQuery] CryptoName? crypto, string productId)
         {
             var merchantUser = _context.MerchantUsers.FirstOrDefault(o => o.AppUserName == User.Identity.Name);
             return _context.MerchantTransactions.Where(o => o.MerchantUserId == merchantUser.Id)

@@ -19,7 +19,10 @@ namespace Merchant.Core.Models
         public string Address { get; set; }
         public double CryptoPrice { get; set; }
         public double Uah { get; set; }
-        public string Status { get; set; }
+        public string Txid { get; set; }
+
+        [EnumDataType(typeof(string))]
+        public TransactionStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime PaidAt { get; set; }
         public DateTime ConfirmedAt { get; set; }
@@ -46,11 +49,35 @@ namespace Merchant.Core.Models
             CreatedAt = DateTime.UtcNow;
             ExpiresAt = CreatedAt.AddHours(2);
             ProductId = productId;
-            Status = "Created";
+            Status = TransactionStatus.Created;
 
+        }
+
+        public void MakePaid(string txid)
+        {
+            Status = TransactionStatus.Paid;
+            PaidAt = DateTime.UtcNow;
+            Txid = txid;
+        }
+        public void MakeConfirmed()
+        {
+            Status = TransactionStatus.Confirmed;
+            ConfirmedAt = DateTime.UtcNow;
+        }
+
+        public void MakeExpired()
+        {
+            Status = TransactionStatus.Expired;
         }
     }
 
+    public enum TransactionStatus
+    {
+        Created,
+        Paid,
+        Confirmed,
+        Expired,
+    }
 
     public enum CryptoName
     {

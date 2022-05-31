@@ -1,4 +1,5 @@
-﻿using Merchant.Core;
+﻿using Merchant.API.Wallet;
+using Merchant.Core;
 
 namespace Merchant.API
 {
@@ -34,6 +35,8 @@ namespace Merchant.API
             var db =
                 scope.ServiceProvider
                     .GetRequiredService<MerchantDbContext>();
+            var handler = new TransactionsHandler(db);
+            handler.CheckTransactions().GetAwaiter().GetResult();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

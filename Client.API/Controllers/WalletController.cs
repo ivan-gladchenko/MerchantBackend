@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Client.API.Models;
 using Client.API.Wallet;
 using IdentityModel.Client;
+using Merchant.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

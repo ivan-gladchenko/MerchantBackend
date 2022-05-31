@@ -21,7 +21,7 @@ namespace Admin.API.Controllers
         }
 
         [HttpGet]
-        public List<MerchantTransaction> GetTransactions([FromQuery] long? userId, [FromQuery] CryptoName? crypto, [FromQuery] string? status)
+        public List<MerchantTransaction> GetTransactions([FromQuery] long? userId, [FromQuery] CryptoName? crypto, [FromQuery] TransactionStatus? status)
         {
             return _context.MerchantTransactions.WhereIf(userId != null,
                     o => o.MerchantUserId == userId)

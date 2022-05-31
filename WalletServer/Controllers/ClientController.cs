@@ -8,7 +8,7 @@ namespace WalletServer.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private ICoreService coreService;
+        private readonly ICoreService coreService;
         public ClientController(ScopedWallet scopedWallet)
         {
             coreService = scopedWallet.CoreService;
