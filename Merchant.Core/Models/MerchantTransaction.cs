@@ -21,7 +21,7 @@ namespace Merchant.Core.Models
         public double Uah { get; set; }
         public string Txid { get; set; }
 
-        [EnumDataType(typeof(string))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public TransactionStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime PaidAt { get; set; }
@@ -50,6 +50,7 @@ namespace Merchant.Core.Models
             ExpiresAt = CreatedAt.AddHours(2);
             ProductId = productId;
             Status = TransactionStatus.Created;
+            Txid = string.Empty;
 
         }
 

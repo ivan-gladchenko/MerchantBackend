@@ -44,6 +44,10 @@ namespace WalletServer.Rpc.Handler
                 var httpResponse = webClient.PostAsync(_address, new StringContent(json, Encoding.UTF8, "application/json-rpc")).GetAwaiter().GetResult();
                 string uploadString = httpResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var response = JsonSerializer.Deserialize<RpcResponse<T>>(uploadString);
+                if (response?.error != null)
+                {
+                    throw new RpcException(response.error.message);
+                }
                 return response;
             }
             catch (WebException e)

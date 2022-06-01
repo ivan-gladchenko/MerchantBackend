@@ -62,7 +62,7 @@ namespace Merchant.API.Wallet
                 var cryptos = merchantTransactions.DistinctBy(o => o.Crypto).Select(o => o.Crypto);
                 foreach (var crypto in cryptos)
                 {
-                    mappedTransactions = await AddTransactions(mappedTransactions, crypto, user.Id);
+                    mappedTransactions = await AddTransactions(mappedTransactions, crypto, user.Uuid);
                 }
 
                 foreach (var merchantTransaction in merchantTransactions)
@@ -91,7 +91,7 @@ namespace Merchant.API.Wallet
                 var cryptos = merchantTransactions.DistinctBy(o => o.Crypto).Select(o => o.Crypto);
                 foreach (var crypto in cryptos)
                 {
-                    mappedTransactions = await AddTransactions(mappedTransactions, crypto, user.Id);
+                    mappedTransactions = await AddTransactions(mappedTransactions, crypto, user.Uuid);
                 }
                 foreach (var merchantTransaction in merchantTransactions)
                 {

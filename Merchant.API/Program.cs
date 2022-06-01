@@ -1,3 +1,4 @@
+using Merchant.API;
 using Merchant.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("Mssql");
 builder.Services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(connectionString), contextLifetime: ServiceLifetime.Scoped);
+builder.Services.AddHostedService<TransactionsHostedService>();
 
 var app = builder.Build();
 

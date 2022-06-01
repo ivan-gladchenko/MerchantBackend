@@ -27,10 +27,10 @@ namespace Client.API
                 return;
             }
             var apiKey = httpContextAccessor.HttpContext.Request.Headers["ApiKey"].ToString();
-            if (apiKey != null)
+            if (!string.IsNullOrEmpty(apiKey))
             {
                 MerchantUser = context.MerchantUsers.FirstOrDefault(o => o.ApiKey == apiKey);
-                var id = context.Users.FirstOrDefault(o => o.UserName == MerchantUser.AppUserName)?.Id;
+                var id = context.Users.FirstOrDefault(o => o.UserName == MerchantUser.AppUserName)?.Uuid;
                 WalletManager = new WalletManager(wallet, id);
                 return;
             }

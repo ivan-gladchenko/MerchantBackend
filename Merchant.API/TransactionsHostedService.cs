@@ -20,7 +20,7 @@ namespace Merchant.API
             _logger.LogInformation("Timed Hosted Service running.");
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(60));
+                TimeSpan.FromSeconds(30));
 
             return Task.CompletedTask;
         }

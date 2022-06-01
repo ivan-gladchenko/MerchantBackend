@@ -20,7 +20,7 @@ namespace Merchant.API.Controllers
         [HttpGet]
         public async Task<List<CoreTransaction>?> GetTransactions([FromQuery] CryptoName cryptoName, [FromQuery] string walletId)
         {
-            TransactionsHandler handler = new TransactionsHandler();
+            TransactionsHandler handler = new TransactionsHandler(dbContext);
             return await handler.GetTransactions(cryptoName, walletId);
         }
     }
