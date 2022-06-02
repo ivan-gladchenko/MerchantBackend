@@ -30,6 +30,10 @@ namespace Client.API
             if (!string.IsNullOrEmpty(apiKey))
             {
                 MerchantUser = context.MerchantUsers.FirstOrDefault(o => o.ApiKey == apiKey);
+                if (MerchantUser == null)
+                {
+                    return;
+                }
                 var id = context.Users.FirstOrDefault(o => o.UserName == MerchantUser.AppUserName)?.Uuid;
                 WalletManager = new WalletManager(wallet, id);
                 return;

@@ -14,11 +14,12 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("Mssql");
 builder.Services.AddDbContext<MerchantDbContext>(o => o.UseSqlServer(connectionString), contextLifetime: ServiceLifetime.Scoped);
 builder.Services.AddHostedService<TransactionsHostedService>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -27,5 +28,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<MerchantHub>("/signalr");
 
 app.Run();

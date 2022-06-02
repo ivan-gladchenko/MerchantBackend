@@ -24,26 +24,28 @@ namespace Client.API.Controllers
         }
 
         [HttpPost]
-        public async Task<MerchantTransaction> Post([FromBody] PaymentRequest payment, string wallet)
+        public async Task<ActionResult<MerchantTransaction>> Post([FromBody] PaymentRequest payment, string wallet)
         {
             if (_contextHandler.MerchantUser == null)
             {
-                Response.StatusCode = 400;
-                return null;
+                return Unauthorized("Wrong or no ApiKey");
+            }
+
+            if (!Uri.TryCreate(_contextHandler.MerchantUser.WebhookAddress, UriKind.Absolute, out var url))
+            {
+                return BadRequest("Set webhook address");
             }
             var prices = await WalletManager.GetPrices();
             if (prices.Key <= 0 || prices.Value <= 0)
             {
-                Response.StatusCode = 400;
-                return null;
+                return BadRequest("Cant get prices");
             }
             var price = wallet == "bitcoin" ? prices.Key : prices.Value;
             Enum.TryParse<CryptoName>(wallet, out var currency);
             var address = await _contextHandler.WalletManager.GetNewAddress();
             if (string.IsNullOrEmpty(address))
             {
-                Response.StatusCode = 400;
-                return null;
+                return BadRequest("Cant create address");
             }
             var transaction = new MerchantTransaction(_contextHandler.MerchantUser.Id, payment.UahPrice,
                 address, price, currency, payment.ProductId);

@@ -1,4 +1,5 @@
-﻿using Merchant.API.Wallet;
+﻿using Merchant.API.Models.Dto;
+using Merchant.API.Wallet;
 using Merchant.Core;
 using Merchant.Core.Models;
 using Microsoft.AspNetCore.Http;
@@ -18,10 +19,14 @@ namespace Merchant.API.Controllers
         }
 
         [HttpGet]
-        public async Task<List<CoreTransaction>?> GetTransactions([FromQuery] CryptoName cryptoName, [FromQuery] string walletId)
+        public ActionResult<MerchantTransactionDto> GetMerchantTransactionDto([FromQuery] string id)
         {
-            TransactionsHandler handler = new TransactionsHandler(dbContext);
-            return await handler.GetTransactions(cryptoName, walletId);
+            var merchantTransaction = dbContext.MerchantTransactions.FirstOrDefault(x => x.Id.ToString() == id);
+            if (merchantTransaction == null)
+            {
+                return NotFound();
+            }
+            return new MerchantTransactionDto(merchantTransaction);
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using System.Text.Json;
+﻿using System.Net.Mime;
+using System.Text;
 using IdentityModel.Client;
+using Merchant.API.Models;
 using Merchant.Core;
 using Merchant.Core.Models;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Merchant.API.Wallet
 {
@@ -70,6 +74,8 @@ namespace Merchant.API.Wallet
                     var transaction = mappedTransactions.FirstOrDefault(o => o.Txid == merchantTransaction.Txid);
                     if (transaction?.Confirmations > 0)
                     {
+                        if (!await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Confirmed"))
+                            continue;
                         merchantTransaction.MakeConfirmed();
                         _context.MerchantTransactions.Update(merchantTransaction);
                     }
@@ -97,6 +103,7 @@ namespace Merchant.API.Wallet
                 {
                     if (merchantTransaction.ExpiresAt <= DateTime.UtcNow)
                     {
+                        await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Expired");
                         merchantTransaction.MakeExpired();
                         _context.MerchantTransactions.Update(merchantTransaction);
                         continue;
@@ -105,15 +112,32 @@ namespace Merchant.API.Wallet
                     var mappedTransaction = mappedTransactions.FirstOrDefault(o =>
                         o.@in && o.Address == merchantTransaction.Address &&
                         Math.Abs(o.Value - merchantTransaction.Value) < 0.0000001);
-                    if (mappedTransaction != null)
-                    {
-                        merchantTransaction.MakePaid(mappedTransaction.Txid);
-                        _context.MerchantTransactions.Update(merchantTransaction);
-                    }
+                    if (mappedTransaction == null) continue;
+                    merchantTransaction.MakePaid(mappedTransaction.Txid);
+                    _context.MerchantTransactions.Update(merchantTransaction);
                 }
                 await _context.SaveChangesAsync();
             }
 
+        }
+
+        private async Task<bool> PostWebhook(string webhookAddress, string productId, string status)
+        {
+            var obj = new WebhookDto
+            {
+                ProductId = productId,
+                Status = status
+            };
+            try
+            {
+                var res = await new HttpClient().PostAsync(webhookAddress,
+                    new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, MediaTypeNames.Application.Json));
+                return res.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private async Task<List<MappedTransaction>> AddTransactions(List<MappedTransaction> mappedTransactions, CryptoName crypto, string id)

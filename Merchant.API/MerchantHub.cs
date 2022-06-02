@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Merchant.Core.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Merchant.API
 {
@@ -15,6 +16,11 @@ namespace Merchant.API
             if (transactionId != null)
                 Groups.AddToGroupAsync(Context.ConnectionId, transactionId);
             return base.OnConnectedAsync();
+        }
+
+        public async Task SendStatus(string transactionId, TransactionStatus status)
+        {
+            await Clients.Group(transactionId).SendAsync("StatusChanged", status.ToString());
         }
     }
 }
