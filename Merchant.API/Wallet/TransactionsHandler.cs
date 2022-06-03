@@ -4,6 +4,7 @@ using IdentityModel.Client;
 using Merchant.API.Models;
 using Merchant.Core;
 using Merchant.Core.Models;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -13,10 +14,12 @@ namespace Merchant.API.Wallet
     {
         private HttpClient _httpClient;
         private readonly MerchantDbContext _context;
+        private readonly IHubContext<MerchantHub> _merchantHub;
 
-        public TransactionsHandler(MerchantDbContext context)
+        public TransactionsHandler(MerchantDbContext context, IHubContext<MerchantHub> merchantHub)
         {
             _context = context;
+            _merchantHub = merchantHub;
             _httpClient = new HttpClient();
         }
 
@@ -74,8 +77,9 @@ namespace Merchant.API.Wallet
                     var transaction = mappedTransactions.FirstOrDefault(o => o.Txid == merchantTransaction.Txid);
                     if (transaction?.Confirmations > 0)
                     {
-                        if (!await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Confirmed"))
-                            continue;
+                        // if (!await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Confirmed"))
+                        //     continue;
+                        await SendStatus(merchantTransaction.Id.ToString(), TransactionStatus.Confirmed);
                         merchantTransaction.MakeConfirmed();
                         _context.MerchantTransactions.Update(merchantTransaction);
                     }
@@ -103,7 +107,8 @@ namespace Merchant.API.Wallet
                 {
                     if (merchantTransaction.ExpiresAt <= DateTime.UtcNow)
                     {
-                        await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Expired");
+                        //await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Expired");
+                        await SendStatus(merchantTransaction.Id.ToString(), TransactionStatus.Expired);
                         merchantTransaction.MakeExpired();
                         _context.MerchantTransactions.Update(merchantTransaction);
                         continue;
@@ -113,6 +118,7 @@ namespace Merchant.API.Wallet
                         o.@in && o.Address == merchantTransaction.Address &&
                         Math.Abs(o.Value - merchantTransaction.Value) < 0.0000001);
                     if (mappedTransaction == null) continue;
+                    await SendStatus(merchantTransaction.Id.ToString(), TransactionStatus.Paid);
                     merchantTransaction.MakePaid(mappedTransaction.Txid);
                     _context.MerchantTransactions.Update(merchantTransaction);
                 }
@@ -153,6 +159,12 @@ namespace Merchant.API.Wallet
         private List<MerchantTransaction> Get(TransactionStatus status)
         {
             return _context.MerchantTransactions.Where(x => x.Status == status).ToList();
+        }
+
+        public async Task SendStatus(string transactionId, TransactionStatus status)
+        {
+            Console.WriteLine(transactionId);
+            await _merchantHub.Clients.Group(transactionId).SendAsync("StatusChanged", status.ToString());
         }
 
     }

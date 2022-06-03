@@ -1,5 +1,6 @@
 ﻿using Merchant.API.Wallet;
 using Merchant.Core;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Merchant.API
 {
@@ -25,7 +26,7 @@ namespace Merchant.API
             return Task.CompletedTask;
         }
 
-        private void DoWork(object? state)
+        private async void DoWork(object? state)
         {
             var count = Interlocked.Increment(ref executionCount);
             
@@ -35,8 +36,9 @@ namespace Merchant.API
             var db =
                 scope.ServiceProvider
                     .GetRequiredService<MerchantDbContext>();
-            var handler = new TransactionsHandler(db);
-            handler.CheckTransactions().GetAwaiter().GetResult();
+            var merchantHub = scope.ServiceProvider.GetRequiredService<IHubContext<MerchantHub>>();
+            var handler = new TransactionsHandler(db, merchantHub);
+            await handler.CheckTransactions();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

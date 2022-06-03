@@ -1,8 +1,11 @@
 ﻿using Merchant.Core.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Merchant.API
 {
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class MerchantHub : Hub
     {
         public MerchantHub()
@@ -12,15 +15,12 @@ namespace Merchant.API
 
         public override Task OnConnectedAsync()
         {
-            var transactionId = Context.GetHttpContext()?.Request.Headers["transaction"].ToString();
+            var transactionId = Context.GetHttpContext()?.User.Claims.FirstOrDefault(o => o.Type == "id")?.Value;
+            Console.WriteLine($"Transid: {transactionId}");
             if (transactionId != null)
-                Groups.AddToGroupAsync(Context.ConnectionId, transactionId);
+                 Groups.AddToGroupAsync(Context.ConnectionId, transactionId).GetAwaiter().GetResult();
             return base.OnConnectedAsync();
         }
 
-        public async Task SendStatus(string transactionId, TransactionStatus status)
-        {
-            await Clients.Group(transactionId).SendAsync("StatusChanged", status.ToString());
-        }
     }
 }

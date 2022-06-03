@@ -1,9 +1,13 @@
-﻿using Merchant.API.Models.Dto;
+﻿using System.Security.Claims;
+using Merchant.API.Models.Dto;
 using Merchant.API.Wallet;
 using Merchant.Core;
 using Merchant.Core.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Merchant.API.Controllers
 {
@@ -12,21 +16,48 @@ namespace Merchant.API.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly MerchantDbContext dbContext;
+        private readonly IHubContext<MerchantHub> merchantHub;
 
-        public PaymentController(MerchantDbContext dbContext)
+        public PaymentController(MerchantDbContext dbContext, IHubContext<MerchantHub> merchantHub)
         {
             this.dbContext = dbContext;
+            this.merchantHub = merchantHub;
         }
 
         [HttpGet]
-        public ActionResult<MerchantTransactionDto> GetMerchantTransactionDto([FromQuery] string id)
+        public async Task<ActionResult<MerchantTransactionDto>> GetMerchantTransactionDto([FromQuery] string id)
         {
             var merchantTransaction = dbContext.MerchantTransactions.FirstOrDefault(x => x.Id.ToString() == id);
             if (merchantTransaction == null)
             {
                 return NotFound();
             }
+            var claims = new List<Claim>
+            {
+                new("id", id),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                IsPersistent = true,
+                IssuedUtc = DateTime.UtcNow
+            };
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
             return new MerchantTransactionDto(merchantTransaction);
         }
+
+        [HttpPost]
+        public async Task SendShit([FromForm] string id, [FromForm] TransactionStatus status)
+        {
+            await merchantHub.Clients.Group(id).SendAsync("StatusChanged", status.ToString());
+        }
+
     }
 }
