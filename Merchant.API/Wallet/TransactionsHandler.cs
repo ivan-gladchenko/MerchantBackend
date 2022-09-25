@@ -77,11 +77,12 @@ namespace Merchant.API.Wallet
                     var transaction = mappedTransactions.FirstOrDefault(o => o.Txid == merchantTransaction.Txid);
                     if (transaction?.Confirmations > 0)
                     {
-                        // if (!await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Confirmed"))
-                        //     continue;
-                        await SendStatus(merchantTransaction.Id.ToString(), TransactionStatus.Confirmed);
-                        merchantTransaction.MakeConfirmed();
-                        _context.MerchantTransactions.Update(merchantTransaction);
+                        if (await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Confirmed"))
+                        {
+                            await SendStatus(merchantTransaction.Id.ToString(), TransactionStatus.Confirmed);
+                            merchantTransaction.MakeConfirmed();
+                            _context.MerchantTransactions.Update(merchantTransaction);
+                        }
                     }
                 }
                 await _context.SaveChangesAsync();
@@ -107,7 +108,7 @@ namespace Merchant.API.Wallet
                 {
                     if (merchantTransaction.ExpiresAt <= DateTime.UtcNow)
                     {
-                        //await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Expired");
+                        await PostWebhook(merchUser.WebhookAddress, merchantTransaction.ProductId, "Expired");
                         await SendStatus(merchantTransaction.Id.ToString(), TransactionStatus.Expired);
                         merchantTransaction.MakeExpired();
                         _context.MerchantTransactions.Update(merchantTransaction);
@@ -136,7 +137,8 @@ namespace Merchant.API.Wallet
             };
             try
             {
-                var res = await new HttpClient().PostAsync(webhookAddress,
+                var client = new HttpClient();
+                var res = await client.PostAsync(webhookAddress,
                     new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, MediaTypeNames.Application.Json));
                 return res.IsSuccessStatusCode;
             }

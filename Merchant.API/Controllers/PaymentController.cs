@@ -53,11 +53,5 @@ namespace Merchant.API.Controllers
             return new MerchantTransactionDto(merchantTransaction);
         }
 
-        [HttpPost]
-        public async Task SendShit([FromForm] string id, [FromForm] TransactionStatus status)
-        {
-            await merchantHub.Clients.Group(id).SendAsync("StatusChanged", status.ToString());
-        }
-
     }
 }

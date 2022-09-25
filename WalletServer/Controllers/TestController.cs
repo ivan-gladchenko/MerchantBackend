@@ -29,21 +29,37 @@ namespace WalletServer.Controllers
             return bitcoinService.GetBlockCount();
         }
 
-        [HttpPost("create")]
-        public string CreateWallet([FromForm] string walletName)
+        [HttpPost("create/btc")]
+        public string CreateWalletBtc([FromForm] string walletName)
         {
            return bitcoinService.CreateWallet(walletName, false, false).name;
         }
 
-        [HttpPost("unload")]
-        public string UnloadWallet([FromForm] string walletName)
+        [HttpPost("unload/btc")]
+        public string UnloadWalletBtc([FromForm] string walletName)
         {
             return bitcoinService.UnloadWallet(walletName).warning;
         }
-        [HttpPost("load")]
-        public string LoadWallet([FromForm] string walletName)
+        [HttpPost("load/btc")]
+        public string LoadWalletBtc([FromForm] string walletName)
         {
             return bitcoinService.LoadWallet(walletName).warning;
+        }
+        [HttpPost("create/ltc")]
+        public string CreateWalletLtc([FromForm] string walletName)
+        {
+            return litecoinService.CreateWallet(walletName, false, false).name;
+        }
+
+        [HttpPost("unload/ltc")]
+        public string UnloadWalletLtc([FromForm] string walletName)
+        {
+            return litecoinService.UnloadWallet(walletName).warning;
+        }
+        [HttpPost("load/ltc")]
+        public string LoadWalletLtc([FromForm] string walletName)
+        {
+            return litecoinService.LoadWallet(walletName).warning;
         }
 
         [HttpGet("wallets/btc")]

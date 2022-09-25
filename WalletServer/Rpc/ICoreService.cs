@@ -141,7 +141,7 @@ namespace WalletServer.Rpc
 
         ListWalletDirResponse ListWalletDir();
         List<string> ListWallets();
-        LoadWalletResponse LoadWallet(string filename, object load_on_startup = null);
+        LoadWalletResponse LoadWallet(string filename);
         bool LockUnspent(bool unlock, List<LockUnspentTransaction> transactions = null);
         PsbtBumpFeeResponse PsbtBumpFee(string txid, PsbtBumpFeeOptions options = null);
         void RemovePrunedFunds(string txid);

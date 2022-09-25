@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.API.Models.Profile;
 using Client.API.Models.Profile.Dto;
+using Client.API.Wallet;
 using Merchant.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,17 @@ namespace Client.API.Controllers
         {
             var user = await _context.MerchantUsers.FirstOrDefaultAsync(o => o.AppUserName == User.Identity.Name);
             return new UserProfileDto(user);
+        }
+
+        [HttpGet("prices")]
+        public async Task<string> GetPrices()
+        {
+            var prices = await WalletManager.GetPrices();
+            return new
+            {
+                bitcoin = prices.Key,
+                litecoin = prices.Value,
+            }.ToString();
         }
 
         [HttpPost("webhook")]

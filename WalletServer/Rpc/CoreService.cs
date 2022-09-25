@@ -300,8 +300,8 @@ namespace WalletServer.Rpc
 
             return Handler.Send<List<string>>("listwallets", null, true).result;
         }
-        public LoadWalletResponse LoadWallet(string filename, object load_on_startup = null) => Handler
-            .Send<LoadWalletResponse>("loadwallet", new object[] {filename, load_on_startup}).result;
+        public LoadWalletResponse LoadWallet(string filename) => Handler
+            .Send<LoadWalletResponse>("loadwallet", new object[] {filename}).result;
         public bool LockUnspent(bool unlock, List<LockUnspentTransaction> transactions = null) =>
             Handler.Send<bool>("lockunspent", new object[] {unlock, transactions}).result;
         public PsbtBumpFeeResponse PsbtBumpFee(string txid, PsbtBumpFeeOptions options = null) =>

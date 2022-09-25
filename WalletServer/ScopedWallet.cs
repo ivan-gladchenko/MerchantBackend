@@ -42,6 +42,7 @@ namespace WalletServer
             }
             try
             {
+                Console.WriteLine(walletId);
                 var resp = CoreService.LoadWallet(walletId);
                 if (resp == null)
                 {
